@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MDS TAC</string>
+    <string name="prompt_leave_app">Da li želite da napustite aplikaciju?</string>
+    <string name="yes">Da</string>
+    <string name="no">Ne</string>
+    <string name="warning">Upozorenje!</string>
+    <string name="connection_not_secure">Vaša konekcija nije bezbedna.\nDa li želite da nastavite?</string>
+</resources>

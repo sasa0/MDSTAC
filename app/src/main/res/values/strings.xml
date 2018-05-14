@@ -3,8 +3,8 @@
     <string name="prompt_leave_app">Da li želite da napustite aplikaciju?</string>
     <string name="yes">Da</string>
     <string name="no">Ne</string>
-    <string name="warning">Upozorenje!</string>
+    <string name="warning">Warning</string>
     <string name="connection_not_secure">Vaša konekcija nije bezbedna.\nDa li želite da nastavite?</string>
-    <string name="no_access">Pristup nije dozvoljen.</string>
+    <string name="no_access"><b>mdstac.mds.rs</b> took too long to respond.</string>
     <string name="ok">OK</string>
 </resources>

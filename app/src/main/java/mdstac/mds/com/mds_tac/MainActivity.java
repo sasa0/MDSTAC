@@ -91,8 +91,8 @@ public class MainActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
                 Log.d("progressLog", "timer stopped - sslError!");
                 timer.cancel();
-                //  handler.proceed(); // ako je ovaj kod aktivan, NE prikazuje se upozorenje.
-                showWarningDialog(context, handler); // ako je ovaj kod aktivan, prikazuje se upozorenje.
+                handler.proceed(); // ako je ovaj kod aktivan, NE prikazuje se upozorenje.
+                //showWarningDialog(context, handler); // ako je ovaj kod aktivan, prikazuje se upozorenje.
             }
         });
 

@@ -5,8 +5,6 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.net.http.SslError;
 import android.os.CountDownTimer;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -23,10 +21,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
-import android.widget.Toast;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
     private WebView myWebView;
@@ -50,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
             Log.e(LOG_TAG, "Could not set ActionBar background.");
         }
 
-        progressBar = (ProgressBar)findViewById(R.id.progress_bar);
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         myWebView = (WebView) findViewById(R.id.webview);
         WebSettings webSettings = myWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -59,10 +53,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 progressBar.setVisibility(View.VISIBLE);
-                timer = new CountDownTimer(timeout,interval) {
+                timer = new CountDownTimer(timeout, interval) {
                     @Override
                     public void onTick(long l) {
-                        if (MainActivity.this.myWebView.getProgress() <100) {
+                        if (MainActivity.this.myWebView.getProgress() < 100) {
                             Log.d("progressLog", "progress =  " + MainActivity.this.myWebView.getProgress());
                         }
                     }
@@ -132,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void showExitDialog(Context context){
+    private void showExitDialog(Context context) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
         dialog.setMessage(R.string.prompt_leave_app);
         dialog.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
@@ -151,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void showWarningDialog(Context context, final SslErrorHandler handler){
+    private void showWarningDialog(Context context, final SslErrorHandler handler) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
         dialog.setTitle(R.string.warning);
         dialog.setMessage(R.string.connection_not_secure);  //ctrl + klik na connection_not_secure da izmenis tekst poruke
@@ -172,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void showNoAccessDialog(Context context){
+    private void showNoAccessDialog(Context context) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
         dialog.setTitle(R.string.warning);
         dialog.setMessage(R.string.no_access);  //ctrl + klik na connection_not_secure da izmenis tekst poruke

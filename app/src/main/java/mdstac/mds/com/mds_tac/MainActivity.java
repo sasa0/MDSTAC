@@ -46,29 +46,31 @@ public class MainActivity extends AppCompatActivity {
 
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         myWebView = (WebView) findViewById(R.id.webview);
+
+        progressBar.setVisibility(View.VISIBLE);
+        timer = new CountDownTimer(timeout, interval) {
+            @Override
+            public void onTick(long l) {
+                if (myWebView.getProgress() < 100) {
+                    Log.d("progressLog", "progress =  " + myWebView.getProgress());
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                Log.d("progressLog", "timeout!");
+                progressBar.setVisibility(View.GONE);
+                showNoAccessDialog(context);
+                timer.cancel();
+            }
+        }.start();
+
         WebSettings webSettings = myWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         myWebView.loadUrl("https://mdstac.mds.rs/mdstac.htm");
         myWebView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                progressBar.setVisibility(View.VISIBLE);
-                timer = new CountDownTimer(timeout, interval) {
-                    @Override
-                    public void onTick(long l) {
-                        if (MainActivity.this.myWebView.getProgress() < 100) {
-                            Log.d("progressLog", "progress =  " + MainActivity.this.myWebView.getProgress());
-                        }
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        Log.d("progressLog", "timeout!");
-                        progressBar.setVisibility(View.GONE);
-                        showNoAccessDialog(context);
-                        timer.cancel();
-                    }
-                }.start();
 
             }
 

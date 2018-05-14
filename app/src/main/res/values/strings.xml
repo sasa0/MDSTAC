@@ -5,4 +5,6 @@
     <string name="no">Ne</string>
     <string name="warning">Upozorenje!</string>
     <string name="connection_not_secure">Vaša konekcija nije bezbedna.\nDa li želite da nastavite?</string>
+    <string name="no_access">Pristup nije dozvoljen.</string>
+    <string name="ok">OK</string>
 </resources>

@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.net.http.SslError;
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -12,17 +15,27 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.JsResult;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
     private WebView myWebView;
     private final String LOG_TAG = this.getClass().getName();
     private Context context;
+    private long timeout = 5000;
+    private long interval = 500;
+    private CountDownTimer timer;
+    private ProgressBar progressBar;
 
 
     @Override
@@ -37,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
             Log.e(LOG_TAG, "Could not set ActionBar background.");
         }
 
+        progressBar = (ProgressBar)findViewById(R.id.progress_bar);
         myWebView = (WebView) findViewById(R.id.webview);
         WebSettings webSettings = myWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -44,6 +58,32 @@ public class MainActivity extends AppCompatActivity {
         myWebView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                progressBar.setVisibility(View.VISIBLE);
+                timer = new CountDownTimer(timeout,interval) {
+                    @Override
+                    public void onTick(long l) {
+                        if (MainActivity.this.myWebView.getProgress() <100) {
+                            Log.d("progressLog", "progress =  " + MainActivity.this.myWebView.getProgress());
+                        }
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        Log.d("progressLog", "timeout!");
+                        progressBar.setVisibility(View.GONE);
+                        showNoAccessDialog(context);
+                        timer.cancel();
+                    }
+                }.start();
+
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                progressBar.setVisibility(View.GONE);
+                Log.d("progressLog", "page finished loading");
+                timer.cancel();
             }
 
             @Override
@@ -54,6 +94,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                progressBar.setVisibility(View.GONE);
+                Log.d("progressLog", "timer stopped - sslError!");
+                timer.cancel();
                 //  handler.proceed(); // ako je ovaj kod aktivan, NE prikazuje se upozorenje.
                 showWarningDialog(context, handler); // ako je ovaj kod aktivan, prikazuje se upozorenje.
             }
@@ -120,6 +163,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         dialog.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                System.exit(0);
+            }
+        });
+        dialog.setCancelable(false);
+        dialog.show();
+    }
+
+    private void showNoAccessDialog(Context context){
+        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+        dialog.setTitle(R.string.warning);
+        dialog.setMessage(R.string.no_access);  //ctrl + klik na connection_not_secure da izmenis tekst poruke
+        dialog.setIcon(R.drawable.ic_warning_red_24dp);
+        dialog.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 System.exit(0);
